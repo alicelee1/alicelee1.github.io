@@ -1,0 +1,979 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rumeng (Alice) Li | AI Researcher</title>
+    <style>
+        :root {
+            --primary: #1a1a2e;
+            --secondary: #16213e;
+            --accent: #0f3460;
+            --highlight: #e94560;
+            --text: #2d3436;
+            --text-light: #636e72;
+            --background: #ffffff;
+            --surface: #f8f9fa;
+            --border: #e9ecef;
+            --shadow-sm: 0 2px 8px rgba(0,0,0,0.05);
+            --shadow-md: 0 4px 16px rgba(0,0,0,0.08);
+            --shadow-lg: 0 8px 32px rgba(0,0,0,0.12);
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.7;
+            color: var(--text);
+            background: var(--background);
+            overflow-x: hidden;
+        }
+        
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+            color: white;
+            padding: 5rem 2rem 3rem;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg width="100" height="100" xmlns="http://www.w3.org/2000/svg"><defs><pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse"><path d="M 40 0 L 0 0 0 40" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="1"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)"/></svg>');
+            opacity: 0.3;
+        }
+        
+        .hero-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .hero h1 {
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            letter-spacing: -0.02em;
+        }
+        
+        .hero-subtitle {
+            font-size: clamp(1rem, 2vw, 1.25rem);
+            opacity: 0.95;
+            font-weight: 300;
+            margin-bottom: 1.5rem;
+        }
+        
+        .hero-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+            font-size: 0.95rem;
+            opacity: 0.9;
+        }
+        
+        .hero-meta-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .hero-meta-item::before {
+            content: '●';
+            opacity: 0.6;
+        }
+        
+        /* Navigation */
+        nav {
+            background: var(--background);
+            border-bottom: 1px solid var(--border);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(10px);
+            box-shadow: var(--shadow-sm);
+        }
+        
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+        
+        .nav-menu {
+            display: flex;
+            list-style: none;
+            gap: 0.5rem;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: none;
+        }
+        
+        .nav-menu::-webkit-scrollbar {
+            display: none;
+        }
+        
+        .nav-menu a {
+            display: block;
+            padding: 1rem 1.25rem;
+            color: var(--text);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: var(--transition);
+            border-bottom: 2px solid transparent;
+            white-space: nowrap;
+        }
+        
+        .nav-menu a:hover {
+            color: var(--highlight);
+        }
+        
+        .nav-menu a.active {
+            color: var(--highlight);
+            border-bottom-color: var(--highlight);
+        }
+        
+        /* Main Container */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 3rem 2rem;
+        }
+        
+        /* Page Content */
+        .page-content {
+            display: none;
+            animation: fadeIn 0.4s ease;
+        }
+        
+        .page-content.active {
+            display: block;
+        }
+        
+        @keyframes fadeIn {
+            from { 
+                opacity: 0; 
+                transform: translateY(10px);
+            }
+            to { 
+                opacity: 1; 
+                transform: translateY(0);
+            }
+        }
+        
+        /* Section Cards */
+        section {
+            background: var(--background);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 2.5rem;
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow-sm);
+            transition: var(--transition);
+        }
+        
+        section:hover {
+            box-shadow: var(--shadow-md);
+            border-color: var(--accent);
+        }
+        
+        /* Section Headers */
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid var(--surface);
+        }
+        
+        .section-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--accent), var(--highlight));
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.2rem;
+            flex-shrink: 0;
+        }
+        
+        .section-header h2 {
+            font-size: 1.75rem;
+            font-weight: 600;
+            color: var(--primary);
+        }
+        
+        /* Content Placeholders */
+        .content-placeholder {
+            background: var(--surface);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            border: 1px dashed var(--border);
+        }
+        
+        .placeholder-title {
+            font-weight: 600;
+            color: var(--text);
+            margin-bottom: 0.5rem;
+        }
+        
+        .placeholder-meta {
+            color: var(--text-light);
+            font-size: 0.9rem;
+            margin-bottom: 0.75rem;
+        }
+        
+        .placeholder-text {
+            color: var(--text-light);
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+        
+        /* Tag Grid */
+        .tag-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+        }
+        
+        .tag {
+            background: var(--surface);
+            color: var(--text);
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            border: 1px solid var(--border);
+            transition: var(--transition);
+        }
+        
+        .tag:hover {
+            background: var(--accent);
+            color: white;
+            border-color: var(--accent);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-sm);
+        }
+        
+        /* Timeline Item */
+        .timeline-item {
+            position: relative;
+            padding-left: 2rem;
+            padding-bottom: 2rem;
+            border-left: 2px solid var(--border);
+        }
+        
+        .timeline-item:last-child {
+            border-left-color: transparent;
+            padding-bottom: 0;
+        }
+        
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -6px;
+            top: 0;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: var(--highlight);
+            box-shadow: 0 0 0 3px var(--background), 0 0 0 5px var(--highlight);
+        }
+        
+        .timeline-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 1rem;
+            margin-bottom: 0.75rem;
+            flex-wrap: wrap;
+        }
+        
+        .timeline-title {
+            font-weight: 600;
+            color: var(--primary);
+            font-size: 1.1rem;
+        }
+        
+        .timeline-org {
+            color: var(--text-light);
+            font-size: 0.95rem;
+            margin-top: 0.25rem;
+        }
+        
+        .timeline-date {
+            background: var(--surface);
+            color: var(--text-light);
+            padding: 0.25rem 0.75rem;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            white-space: nowrap;
+        }
+        
+        /* Publication Item */
+        .publication-item {
+            background: var(--surface);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            border-left: 3px solid var(--accent);
+            transition: var(--transition);
+        }
+        
+        .publication-item:hover {
+            border-left-color: var(--highlight);
+            box-shadow: var(--shadow-sm);
+            transform: translateX(4px);
+        }
+        
+        .pub-title {
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+            line-height: 1.5;
+        }
+        
+        .pub-meta {
+            color: var(--text-light);
+            font-size: 0.9rem;
+            margin-bottom: 0.25rem;
+        }
+        
+        .pub-venue {
+            color: var(--highlight);
+            font-style: italic;
+            font-size: 0.9rem;
+        }
+        
+        /* Personal Section */
+        .personal-section {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            border: none;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .personal-section::before {
+            content: '"';
+            position: absolute;
+            top: 1rem;
+            left: 1.5rem;
+            font-size: 6rem;
+            color: rgba(0,0,0,0.05);
+            font-family: Georgia, serif;
+            line-height: 1;
+        }
+        
+        .personal-content {
+            position: relative;
+            z-index: 1;
+            font-style: italic;
+            line-height: 1.8;
+            color: var(--text);
+        }
+        
+        /* Footer */
+        footer {
+            background: var(--primary);
+            color: white;
+            padding: 2rem;
+            margin-top: 4rem;
+        }
+        
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+        }
+        
+        .footer-links {
+            display: flex;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+        }
+        
+        .footer-links a {
+            color: rgba(255,255,255,0.8);
+            text-decoration: none;
+            transition: var(--transition);
+        }
+        
+        .footer-links a:hover {
+            color: white;
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .hero {
+                padding: 3rem 1.5rem 2rem;
+            }
+            
+            .container {
+                padding: 2rem 1.5rem;
+            }
+            
+            section {
+                padding: 1.5rem;
+            }
+            
+            .section-header h2 {
+                font-size: 1.5rem;
+            }
+            
+            .timeline-item {
+                padding-left: 1.5rem;
+            }
+            
+            .timeline-header {
+                flex-direction: column;
+            }
+            
+            .footer-content {
+                flex-direction: column;
+                text-align: center;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .hero h1 {
+                font-size: 1.75rem;
+            }
+            
+            .nav-menu a {
+                padding: 0.875rem 1rem;
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Hero Section -->
+    <div class="hero">
+        <div class="hero-content">
+            <h1>Rumeng (Alice) Li</h1>
+            <div class="hero-subtitle">Large Language Models • AI for Health</div>
+            <div class="hero-meta">
+                <div class="hero-meta-item">University of Massachusetts Amherst</div>
+                <div class="hero-meta-item">Amherst, MA</div>
+                <div class="hero-meta-item"><a href="https://scholar.google.com/citations?user=UU2JfZEAAAAJ&hl=en&authuser=1" style="color: inherit;">Google Scholar</a></div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Navigation -->
+    <nav>
+        <div class="nav-container">
+            <ul class="nav-menu">
+                <li><a href="#home" class="nav-link active" data-page="home">About</a></li>
+                <li><a href="#research" class="nav-link" data-page="research">Research</a></li>
+                <li><a href="#publications" class="nav-link" data-page="publications">Publications</a></li>
+                <li><a href="#teaching" class="nav-link" data-page="teaching">Teaching</a></li>
+                <li><a href="#service" class="nav-link" data-page="service">Service</a></li>
+            </ul>
+        </div>
+    </nav>
+    
+    <!-- Main Content -->
+    <main>
+        <div class="container">
+            <!-- Home Page -->
+            <div id="home" class="page-content active">
+                <section>
+                    <div class="section-header">
+                        <div class="section-icon">📋</div>
+                        <h2>Professional Summary</h2>
+                    </div>
+                    <div class="placeholder-text">
+<p>My research develops the next generation of trustworthy health AI by transforming unstructured clinical narratives into predictive, patient-centered, and equitable intelligence. I design computational frameworks—such as multi-agent clinical reasoning systems and privacy-preserving synthetic data generation—to address core challenges in early disease prediction and longitudinal patient modeling.</p>
+<p>A key innovation is integrating subtle health and lifestyle factors from real-world text, enabling AI systems to capture the full clinical and social context of a patient’s life. Rather than treating clinical data as isolated time points, my work models the evolving patient story over time—shifting healthcare AI from static prediction toward dynamic, lifelong health management. </p>
+<p>Grounded in real-world validation, this paradigm has advanced proactive Alzheimer’s disease risk stratification and generated clinically faithful synthetic data for underrepresented populations. My research, published in npj Digital Medicine, Communications Medicine, AAAI, and EMNLP, is conducted in close collaboration with clinical teams at the VA Bedford Healthcare System and Brigham and Women’s Hospital / Harvard Medical School, ensuring direct translational impact.</p>
+                    </div>
+                </section>
+                
+                <section>
+                    <div class="section-header">
+                        <div class="section-icon">🔬</div>
+                        <h2>Research Interests</h2>
+                    </div>
+                    <div class="tag-grid">
+                        <span class="tag">Large language models</span>
+                        <span class="tag">Trustworthy and equitable health AI</span>
+                        <span class="tag">Reliable reasoning framework</span>
+                        <span class="tag">Privacy-preserving synthetic data generation</span>
+                        <span class="tag">Precision prevention and disease trajectory modeling</span>
+                    </div>
+                </section>
+
+                <section class="personal-section">
+                    <div class="personal-content">
+<p class="life-paragraph">
+                Nestled in a charming <span class="highlight">quilt town</span> in the heart of New England, my family and I have found our cozy sanctuary, accompanied by my daughter's mischievous tabby cat, and a hamster. Together, we embrace the rhythm of the seasons, from the vibrant autumn foliage that sets our valley ablaze with color to the <span>long, serene winters</span> that blanket our historic New England town in a hushed, crystalline beauty—a time when the world seems to slow down, and the warmth of home and hearth becomes the center of our universe.
+            </p>                    </div>
+                </section>
+            </div>
+            
+            <!-- Research Page -->
+            <div id="research" class="page-content">
+                <section>
+                    <div class="section-header">
+                        <div class="section-icon">🔬</div>
+                        <h2>Research Experience</h2>
+                    </div>
+<section id="research-experience">
+    <style>
+        #research-experience {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 2rem 1.5rem;
+            color: #333;
+        }
+        
+        .section-title {
+            font-size: 1.8rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            color: #2c3e50;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 0.5rem;
+        }
+        
+        .experience-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        
+        .experience-item {
+            margin-bottom: 2rem;
+            padding: 1.5rem;
+            border-radius: 8px;
+            background-color: #f8f9fa;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        
+        .experience-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        
+        .experience-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 0.8rem;
+        }
+        
+        .experience-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 0.3rem;
+        }
+        
+        .experience-organization {
+            font-size: 1rem;
+            color: #3498db;
+            font-weight: 500;
+        }
+        
+        .experience-date {
+            font-size: 0.9rem;
+            color: #7f8c8d;
+            background-color: #e8f4fc;
+            padding: 0.3rem 0.6rem;
+            border-radius: 4px;
+            white-space: nowrap;
+            margin-left: 1rem;
+        }
+        
+        .advisor {
+            font-size: 0.9rem;
+            color: #7f8c8d;
+            font-style: italic;
+            margin: 0.5rem 0;
+        }
+        
+        .experience-details {
+            list-style: none;
+            padding-left: 0;
+            margin-top: 0.8rem;
+        }
+        
+        .experience-details li {
+            position: relative;
+            padding-left: 1.2rem;
+            margin-bottom: 0.5rem;
+            line-height: 1.5;
+        }
+        
+        .experience-details li:before {
+            content: "•";
+            color: #3498db;
+            font-weight: bold;
+            position: absolute;
+            left: 0;
+        }
+        
+        @media (max-width: 768px) {
+            .experience-header {
+                flex-direction: column;
+            }
+            
+            .experience-date {
+                margin-left: 0;
+                margin-top: 0.5rem;
+                align-self: flex-start;
+            }
+        }
+    </style>
+    
+    
+    <ul class="experience-list">
+        <li class="experience-item">
+            <div class="experience-header">
+                <div>
+                    <div class="experience-title">Research Trainee</div>
+                    <div class="experience-organization">Division of General Internal Medicine and Primary Care, Brigham and Women's Hospital • Harvard Medical School</div>
+                </div>
+                <div class="experience-date">2025–Present</div>
+            </div>
+            <ul class="experience-details">
+                <li>Working on cross-system model transportability and equity assessment.</li>
+            </ul>
+        </li>
+        
+        <li class="experience-item">
+            <div class="experience-header">
+                <div>
+                    <div class="experience-title">Research Assistant</div>
+                    <div class="experience-organization">Bedford Center for Healthcare Organization &amp; Implementation Research, VA Bedford Healthcare System • Department of Veterans Affairs</div>
+                </div>
+                <div class="experience-date">2018–Present</div>
+            </div>
+            <ul class="experience-details">
+                <li>Lead longitudinal NLP research on Alzheimer's disease using unstructured VA clinical narratives, developing clinician-informed symptom taxonomies and annotation pipelines</li>
+                <li>Uncover early-warning patterns and long-term disease trajectories through interpretable machine-learning frameworks</li>
+                <li>Incorporate social and behavioral determinants of health for equitable early-risk prediction</li>
+                <li>Collaborate with neurologists, geriatricians, and data scientists across multiple institutions to ensure methodological rigor, clinical relevance, and translational impact</li>
+            </ul>
+        </li>
+        
+        <li class="experience-item">
+            <div class="experience-header">
+                <div>
+                    <div class="experience-title">Research Assistant – Clinical NLP Group</div>
+                    <div class="experience-organization">University of Massachusetts Amherst • UMass Chan Medical School • UMass Lowell</div>
+                </div>
+                <div class="experience-date">2016–Present</div>
+            </div>
+            <ul class="experience-details">
+                <li>Advanced methods in clinical NLP, including neural machine translation for Spanish-speaking patients</li>
+                <li>Developed deep learning for bleeding-event detection to improve pharmacovigilance</li>
+                <li>Implemented contextual assertion detection—advancing patient safety, health equity, and real-world clinical utility</li>
+            </ul>
+        </li>
+        
+        <li class="experience-item">
+            <div class="experience-header">
+                <div>
+                    <div class="experience-title">Research Intern</div>
+                    <div class="experience-organization">Microsoft, Redmond, WA</div>
+                </div>
+                <div class="experience-date">June–August 2023; June–August 2024</div>
+            </div>
+            <ul class="experience-details">
+                <li>Developed synthetic data generation methods for clinical data</li>
+                <li>Fine-tuned large language models for healthcare prediction tasks</li>
+            </ul>
+        </li>
+        
+        <li class="experience-item">
+            <div class="experience-header">
+                <div>
+                    <div class="experience-title">Research Intern</div>
+                    <div class="experience-organization">Data-driven Intelligent Systems Research Center, National Institute of Information and Communications Technology (NICT), Kyoto, Japan</div>
+                </div>
+                <div class="experience-date">June–August 2017</div>
+            </div>
+            <ul class="experience-details">
+                <li>Built dependency-aware neural architectures for question answering and semantic understanding tasks using the SQuAD benchmark</li>
+            </ul>
+        </li>
+        
+        <li class="experience-item">
+            <div class="experience-header">
+                <div>
+                    <div class="experience-title">Research Student</div>
+                    <div class="experience-organization">Computational Linguistics Lab, Nara Institute of Science and Technology (NAIST), Nara, Japan</div>
+                </div>
+                <div class="experience-date">October 2015–July 2016</div>
+            </div>
+            <div class="advisor">Advisor: Prof. Yuji Matsumoto</div>
+            <ul class="experience-details">
+                <li>Conducted research on recursive deep learning for discourse parsing and document-structure modeling</li>
+            </ul>
+        </li>
+    </ul>
+</section>
+                </section>
+            </div>
+            
+            <!-- Publications Page -->
+            <div id="publications" class="page-content">
+                <section>
+                    <div class="section-header">
+                        <div class="section-icon">📚</div>
+                        <h2>Publications</h2>
+                    </div>
+<section id="publications">
+            <div class="publication-category">
+                <h3 class="category-title">Alzheimer's Disease Prediction with Longitudinal Data</h3>
+                <ol class="publication-list">
+                    <li class="publication-item">
+                        <div class="publication-authors">Li, R. et al.</div>
+                        <div class="publication-title">CARE-AD: a multi-agent large language model framework for Alzheimer's disease prediction using longitudinal clinical notes.</div>
+                        <div class="publication-venue">npj Digital Medicine, 8(1): 541 (2025)</div>
+                        <div class="publication-link"><a href="https://doi.org/10.1038/s41746-025-01940-4">https://doi.org/10.1038/s41746-025-01940-4</a></div>
+                    </li>
+                    <li class="publication-item">
+                        <div class="publication-authors">Li, R. et al.</div>
+                        <div class="publication-title">Early prediction of Alzheimer's disease using longitudinal electronic health records of U.S. military veterans.</div>
+                        <div class="publication-venue">Communications Medicine</div>
+                        <div class="status-note">(in press)</div>
+                    </li>
+                </ol>
+            </div>
+            
+            <div class="publication-category">
+                <h3 class="category-title">Large Language Models: Tuning and Applications</h3>
+                <ol class="publication-list" start="3">
+                    <li class="publication-item">
+                        <div class="publication-authors">Li, R. et al.</div>
+                        <div class="publication-title">Exploring LLM multi-agents for ICD coding.</div>
+                        <div class="publication-venue">In Proc. CIKM 2025</div>
+                        <div class="status-note">(to appear)</div>
+                    </li>
+                    <li class="publication-item">
+                        <div class="publication-authors">Li, R. et al.</div>
+                        <div class="publication-title">LlamaCare: instruction tuning of large language models for clinical NLP.</div>
+                        <div class="publication-venue">In Proc. COLING 2024</div>
+                    </li>
+                </ol>
+            </div>
+            
+            <div class="publication-category">
+                <h3 class="category-title">Synthetic Clinical Data Generation</h3>
+                <ol class="publication-list" start="5">
+                    <li class="publication-item">
+                        <div class="publication-authors">Li, R. et al.</div>
+                        <div class="publication-title">Two directions for clinical data generation with large language models: data-to-label and label-to-data.</div>
+                        <div class="publication-venue">Findings of EMNLP 2023</div>
+                    </li>
+                    <li class="publication-item">
+                        <div class="publication-authors">Li, R. et al.</div>
+                        <div class="publication-title">NoteChat: a dataset of synthetic patient-physician conversations conditioned on clinical notes.</div>
+                        <div class="publication-venue">Findings of ACL 2024</div>
+                    </li>
+                </ol>
+            </div>
+            
+            <div class="publication-category">
+                <h3 class="category-title">Deep learning models and Clinical NLP applications</h3>
+                <ol class="publication-list" start="7">
+                    <li class="publication-item">
+                        <div class="publication-authors">Li, R. et al.</div>
+                        <div class="publication-title">A meta-learning method leveraging multiple domain data for low-resource machine translation.</div>
+                        <div class="publication-venue">In Proc. AAAI 2020</div>
+                    </li>
+                    <li class="publication-item">
+                        <div class="publication-authors">Li, R. et al.</div>
+                        <div class="publication-title">Detection of bleeding events in electronic health record notes using convolutional neural network models enhanced with recurrent neural network autoencoders: a deep learning approach.</div>
+                        <div class="publication-venue">JMIR Medical Informatics 7, e10788 (2019)</div>
+                        <div class="publication-link"><a href="https://doi.org/10.2196/10788">https://doi.org/10.2196/10788</a></div>
+                    </li>
+                    <li class="publication-item">
+                        <div class="publication-authors">Li, R. et al.</div>
+                        <div class="publication-title">A new NMT model for translating clinical texts from English to Spanish.</div>
+                        <div class="publication-venue">In ML4H Workshop at NeurIPS 2019</div>
+                    </li>
+                    <li class="publication-item">
+                        <div class="publication-authors">Li, R. et al.</div>
+                        <div class="publication-title">A hybrid neural network model for joint prediction of presence and period assertions of medical events in clinical notes.</div>
+                        <div class="publication-venue">AMIA Annual Symposium Proceedings 2017, 1149-1158</div>
+                        <div class="publication-link">PMID: 29854183; PMCID: PMC5977733</div>
+                    </li>
+                </ol>
+            </div>
+            
+            <div class="publication-category">
+                <h3 class="category-title">Discourse Analysis</h3>
+                <ol class="publication-list" start="11">
+                    <li class="publication-item">
+                        <div class="publication-authors">Li, R. et al.</div>
+                        <div class="publication-title">Tracking events using time-dependent hierarchical Dirichlet tree model.</div>
+                        <div class="publication-venue">In Proc. SDM 2015</div>
+                    </li>
+                    <li class="publication-item">
+                        <div class="publication-authors">Li, R. et al.</div>
+                        <div class="publication-title">Distributed document representation for document classification.</div>
+                        <div class="publication-venue">In Advances in Knowledge Discovery and Data Mining (PAKDD 2015), LNCS 9077, 377-388 (Springer, Cham, 2015)</div>
+                        <div class="publication-link"><a href="https://doi.org/10.1007/978-3-319-18038-0_17">https://doi.org/10.1007/978-3-319-18038-0_17</a></div>
+                    </li>
+                    <li class="publication-item">
+                        <div class="publication-authors">Li, R. et al.</div>
+                        <div class="publication-title">A hierarchical tree model for update summarization.</div>
+                        <div class="publication-venue">In Advances in Information Retrieval (ECIR 2015), LNCS 9022, 678-683 (Springer, Cham, 2015)</div>
+                        <div class="publication-link"><a href="https://doi.org/10.1007/978-3-319-16354-3_72">https://doi.org/10.1007/978-3-319-16354-3_72</a></div>
+                    </li>
+                    <li class="publication-item">
+                        <div class="publication-authors">Li, R. et al.</div>
+                        <div class="publication-title">Recursive deep models for discourse parsing.</div>
+                        <div class="publication-venue">Proceedings of EMNLP 2014, 2061-2069</div>
+                    </li>
+                    <li class="publication-item">
+                        <div class="publication-authors">Li, R. et al.</div>
+                        <div class="publication-title">Learning to rank for coordination detection.</div>
+                        <div class="publication-venue">In Proc. CICLing 2017</div>
+                    </li>
+                </ol>
+            </div>
+            
+            <div class="publication-category">
+                <h3 class="category-title">Pre-print</h3>
+                <ol class="publication-list" start="16">
+                    <li class="publication-item">
+                        <div class="publication-authors">Li, R. et al.</div>
+                        <div class="publication-title">Large Language Model-Based Extraction of Social Determinants of Health from Electronic Health Records for Alzheimer's Disease Prediction</div>
+                        <div class="status-note">(in progress)</div>
+                    </li>
+                    <li class="publication-item">
+                        <div class="publication-authors">Li, R. et al.</div>
+                        <div class="publication-title">DualAlign: Clinically Grounded Synthetic Data Generation for Alzheimer's Research</div>
+                        <div class="status-note">(under review at ARR)</div>
+                    </li>
+                </ol>
+            </div>
+        </section>
+                </section>
+            </div>
+            
+            <!-- Teaching Page -->
+            <div id="teaching" class="page-content">
+                <section>
+                    <div class="section-header">
+                        <div class="section-icon">👨‍🏫</div>
+                        <h2>Teaching & Mentorship</h2>
+                    </div>
+                    
+<section id="teaching-mentorship">
+            <div class="teaching-item">
+                <h3>Guest Lecturer</h3>
+                <p>University of Massachusetts Lowell • University of Massachusetts Amherst</p>
+                <ul>
+                    <li><em>Data Science</em> (Spring 2025) </li>
+                    <li><em>Applications of Natural Language Processing</em> (Fall 2022)</li>
+                </ul>
+            </div>
+            
+            <div class="teaching-item">
+                <h3>Teaching Assistant</h3>
+                <p>University of Massachusetts Amherst</p>
+                <ul>
+                    <li><em>Probabilistic Graphical Models</em> (COMPSCI 688, Graduate) — Spring 2018</li>
+                    <li><em>Applications of Natural Language Processing</em> (COMPSCI 490A, Graduate) — Fall 2020</li>
+                    <li><em>Programming with Data Structures</em> (COMPSCI 187, Undergraduate, 200+ students) — Fall 2019 — Spring 2021</li>
+                </ul>
+            </div>
+            
+            <div class="teaching-item">
+                <h3>Mentorship</h3>
+                <p>Mentored ~15 undergraduate and graduate students through project-based supervision and individual guidance on research design, implementation, and paper writing (2019–present).</p>
+            </div>
+        </section>
+                </section>
+            </div>
+            
+            <!-- Service Page -->
+            <div id="service" class="page-content">
+                <section>
+                    <div class="section-header">
+                        <div class="section-icon">🤝</div>
+                        <h2>Professional Service</h2>
+                    </div>
+                    
+<section id="professional-service">
+            <div class="service-list">
+                <span class="service-item">npj Digital Medicine</span>
+                <span class="service-item">Journal of Biomedical Informatics</span>
+                <span class="service-item">ACL</span>
+                <span class="service-item">EMNLP</span>
+                <span class="service-item">NAACL</span>
+            </div>
+        </section>
+                </section>
+            </div>
+        </div>
+    </main>
+    
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div>&copy; 2025 Rumeng (Alice) Li</div>
+            <div class="footer-links">
+                <a href="mailto:alicerumengli@gmail.com">Email</a>
+                <a href="#">Google Scholar</a>
+            </div>
+        </div>
+    </footer>
+    
+    <script>
+        // Navigation functionality
+        const navLinks = document.querySelectorAll('.nav-link');
+        const pages = document.querySelectorAll('.page-content');
+        
+        navLinks.forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                
+                // Remove active class from all links and pages
+                navLinks.forEach(l => l.classList.remove('active'));
+                pages.forEach(p => p.classList.remove('active'));
+                
+                // Add active class to clicked link
+                link.classList.add('active');
+                
+                // Show corresponding page
+                const pageId = link.getAttribute('data-page');
+                document.getElementById(pageId).classList.add('active');
+                
+                // Scroll to top
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            });
+        });
+    </script>
+</body>
+</html>
